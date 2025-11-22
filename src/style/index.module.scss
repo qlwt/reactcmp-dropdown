@@ -1,0 +1,177 @@
+.container {
+    position: relative;
+}
+
+.listabs {
+  --scale: 1;
+
+  position: absolute;
+  z-index: var(--qyuddn-z-index, 3);
+
+  transition: transform var(--qyuddn-trtime, 0.2s), opacity var(--qyuddn-trtime, 0.2s);
+
+  &:not(.listabs_open) {
+    --scale: 0;
+
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.listabs_justify_start {
+  &.listabs_horizontal {
+    right: 100%;
+
+    transform-origin: center right;
+
+    &:not(.listabs_align_center) {
+      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px)));
+    }
+
+    &.listabs_align_center {
+      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px))) translateY(-50%);
+    }
+  }
+
+  &.listabs_vertical {
+    bottom: 100%;
+    transform-origin: bottom center;
+
+    &:not(.listabs_align_center) {
+      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px)));
+    }
+
+    &.listabs_align_center {
+      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px))) translateX(-50%);
+    }
+  }
+}
+
+.listabs_justify_end {
+  &.listabs_horizontal {
+    left: 100%;
+    transform-origin: center left;
+
+    &:not(.listabs_align_center) {
+      transform: scaleX(--scale), translateX(var(--gap, 0px));
+    }
+
+    &.listabs_align_center {
+      transform: scaleX(--scale), translateX(var(--gap, 0px)) translateY(-50%);
+    }
+  }
+
+  &.listabs_vertical {
+    top: 100%;
+    transform-origin: top center;
+
+    &:not(.listabs_align_center) {
+      transform: scaleY(--scale), translateY(var(--gap, 0px));
+    }
+
+    &.listabs_align_center {
+      transform: scaleY(--scale), translateY(var(--gap, 0px)) translateX(-50%);
+    }
+  }
+}
+
+.listabs_align_start {
+  &.listabs_horizontal {
+    top: 0;
+  }
+
+  &.listabs_vertical {
+    left: 0;
+  }
+}
+
+.listabs_align_center {
+  &.listabs_horizontal {
+    top: 50%;
+  }
+
+  &.listabs_vertical {
+    left: 50%;
+  }
+}
+
+.listabs_align_end {
+  &.listabs_horizontal {
+    right: 0;
+  }
+
+  &.listabs_vertical {
+    top: 0;
+  }
+}
+
+.listfix {
+  --scale: 1;
+
+  position: fixed;
+  z-index: var(--qyuddn-z-index, 3);
+
+  transition: transform var(--qyuddn-trtime, 0.2s), opacity var(--qyuddn-trtime, 0.2s);
+
+  &:not(.listfix_open) {
+    --scale: 0;
+
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
+.listfix_justify_start {
+  &.listfix_horizontal {
+    transform-origin: center right;
+
+    &:not(.listfix_align_center) {
+      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px)));
+    }
+
+    &.listfix_align_center {
+      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px))) translateY(-50%);
+    }
+  }
+
+  &.listfix_vertical {
+    transform-origin: bottom center;
+
+    &:not(.listfix_align_center) {
+      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px)));
+    }
+
+    &.listfix_align_center {
+      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px))) translateX(-50%);
+    }
+  }
+}
+
+.listfix_justify_end {
+  &.listfix_horizontal {
+    transform-origin: center left;
+
+    &:not(.listfix_align_center) {
+      transform: scaleX(--scale), translateX(var(--gap, 0px));
+    }
+
+    &.listfix_align_center {
+      transform: scaleX(--scale), translateX(var(--gap, 0px)) translateY(-50%);
+    }
+  }
+
+  &.listfix_vertical {
+    transform-origin: top center;
+
+    &:not(.listfix_align_center) {
+      transform: scaleY(--scale), translateY(var(--gap, 0px));
+    }
+
+    &.listfix_align_center {
+      transform: scaleY(--scale), translateY(var(--gap, 0px)) translateX(-50%);
+    }
+  }
+}
+
