@@ -4,7 +4,11 @@
     "version": "1.0.0",
     "main": "./build/bundle/entry/index.js",
     "description": "React Components for Dropdown Positioning",
-    "keywords": ["react", "dropdown", "select"],
+    "keywords": [
+        "react",
+        "dropdown",
+        "select"
+    ],
     "homepage": "https://github.com/qlwt/reactcmp-dropdown#readme",
     "license": "MIT",
     "files": [
@@ -12,7 +16,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "github:qlwt/reactcmp-dropdown"
+        "url": "git+https://github.com/qlwt/reactcmp-dropdown.git"
     },
     "scripts": {
         "build": "run-s build:clear build:style:module build:style:global build:style:types build:rollup",
