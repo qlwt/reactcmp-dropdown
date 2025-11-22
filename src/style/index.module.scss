@@ -26,11 +26,11 @@
     transform-origin: center right;
 
     &:not(.listabs_align_center) {
-      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px)));
+      transform: scaleX(var(--scale)) translateX(calc(-1 * var(--gap, 0px)));
     }
 
     &.listabs_align_center {
-      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px))) translateY(-50%);
+      transform: scaleX(var(--scale)) translateX(calc(-1 * var(--gap, 0px))) translateY(-50%);
     }
   }
 
@@ -39,11 +39,11 @@
     transform-origin: bottom center;
 
     &:not(.listabs_align_center) {
-      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px)));
+      transform: scaleY(var(--scale)) translateY(calc(-1 * var(--gap, 0px)));
     }
 
     &.listabs_align_center {
-      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px))) translateX(-50%);
+      transform: scaleY(var(--scale)) translateY(calc(-1 * var(--gap, 0px))) translateX(-50%);
     }
   }
 }
@@ -54,11 +54,11 @@
     transform-origin: center left;
 
     &:not(.listabs_align_center) {
-      transform: scaleX(--scale), translateX(var(--gap, 0px));
+      transform: scaleX(var(--scale)) translateX(var(--gap, 0px));
     }
 
     &.listabs_align_center {
-      transform: scaleX(--scale), translateX(var(--gap, 0px)) translateY(-50%);
+      transform: scaleX(var(--scale)) translateX(var(--gap, 0px)) translateY(-50%);
     }
   }
 
@@ -67,11 +67,11 @@
     transform-origin: top center;
 
     &:not(.listabs_align_center) {
-      transform: scaleY(--scale), translateY(var(--gap, 0px));
+      transform: scaleY(var(--scale)) translateY(var(--gap, 0px));
     }
 
     &.listabs_align_center {
-      transform: scaleY(--scale), translateY(var(--gap, 0px)) translateX(-50%);
+      transform: scaleY(var(--scale)) translateY(var(--gap, 0px)) translateX(-50%);
     }
   }
 }
@@ -126,52 +126,24 @@
 .listfix_justify_start {
   &.listfix_horizontal {
     transform-origin: center right;
-
-    &:not(.listfix_align_center) {
-      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px)));
-    }
-
-    &.listfix_align_center {
-      transform: scaleX(--scale), translateX(calc(-1 * var(--gap, 0px))) translateY(-50%);
-    }
+    transform: scaleX(var(--scale)) translateX(calc(-1 * var(--gap, 0px)));
   }
 
   &.listfix_vertical {
     transform-origin: bottom center;
-
-    &:not(.listfix_align_center) {
-      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px)));
-    }
-
-    &.listfix_align_center {
-      transform: scaleY(--scale), translateY(calc(-1 * var(--gap, 0px))) translateX(-50%);
-    }
+    transform: scaleY(var(--scale)) translateY(calc(-1 * var(--gap, 0px)));
   }
 }
 
 .listfix_justify_end {
   &.listfix_horizontal {
     transform-origin: center left;
-
-    &:not(.listfix_align_center) {
-      transform: scaleX(--scale), translateX(var(--gap, 0px));
-    }
-
-    &.listfix_align_center {
-      transform: scaleX(--scale), translateX(var(--gap, 0px)) translateY(-50%);
-    }
+    transform: scaleX(var(--scale)) translateX(var(--gap, 0px));
   }
 
   &.listfix_vertical {
     transform-origin: top center;
-
-    &:not(.listfix_align_center) {
-      transform: scaleY(--scale), translateY(var(--gap, 0px));
-    }
-
-    &.listfix_align_center {
-      transform: scaleY(--scale), translateY(var(--gap, 0px)) translateX(-50%);
-    }
+    transform: scaleY(var(--scale)) translateY(var(--gap, 0px));
   }
 }
 
