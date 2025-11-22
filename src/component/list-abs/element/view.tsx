@@ -282,13 +282,13 @@ export const CmpListAbs = r.memo(r.forwardRef<HTMLDivElement, CmpListAbs_Props>(
         } as r.CSSProperties}
 
         onTransitionStart={ev => {
-            if (ev.propertyName === "opacity" && ctxstate.open) {
+            if (ev.nativeEvent.propertyName === "opacity" && ctxstate.open) {
                 visible_set(true)
             }
         }}
 
         onTransitionEnd={ev => {
-            if (ev.propertyName === "opacity" && !ctxstate.open) {
+            if (ev.nativeEvent.propertyName === "opacity" && !ctxstate.open) {
                 revalign_set(false)
                 revjustify_set(false)
                 maxwidth_set(null)
