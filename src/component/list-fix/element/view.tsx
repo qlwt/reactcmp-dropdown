@@ -225,6 +225,7 @@ export type CmpListFix_Props = Readonly<{
     gap?: number
     lazy?: boolean
     align?: AlignRaw
+    tabIndex?: number
     justify?: JustifyRaw
     direction?: DirectionRaw
 
@@ -348,6 +349,8 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
 
     return <div
         ref={mref}
+        
+        tabIndex={props.tabIndex}
 
         className={cl(
             "__qyuddn",
