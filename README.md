@@ -50,6 +50,7 @@ function App() {
         </ddn.CmpButton>
 
         <ddn.CmpListAbs
+            tabIndex={0}
             className={""}
             stylemodule={stylemodule}
 
@@ -79,6 +80,7 @@ function App() {
 
         {/* Same as CmpListAbs, but uses fixed positioning */}
         <ddn.CmpListFix
+            tabIndex={0}
             className={""}
             stylemodule={stylemodule}
 
@@ -102,6 +104,10 @@ function App() {
             justify
             // set justify directly
             jystify={"end" || "start"}
+
+            // when string - finds portal by id
+            // when HTMLElement - uses element for portal
+            portal={"dropdowns" || document.getElementById("dropdowns")}
         >
             Your Content Here
         </ddn.CmpListFix>
