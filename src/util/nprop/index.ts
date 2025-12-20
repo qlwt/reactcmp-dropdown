@@ -35,3 +35,15 @@ export const nprop_direction_new = function(raw: DirectionRaw): Direction {
 
     return raw
 }
+
+export const nprop_portal_new = function(portal: string | HTMLElement | undefined | null): HTMLElement | null {
+    if (typeof portal === "string") {
+        return document.getElementById(portal) ?? null
+    }
+
+    if (portal) {
+        return portal
+    }
+
+    return null
+}

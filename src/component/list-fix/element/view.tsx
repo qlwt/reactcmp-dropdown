@@ -2,9 +2,10 @@ import { CmpCtxState_Open } from "#src/component/ctx-state/element/open.js"
 import type { Align, AlignRaw, Direction, DirectionRaw, Justify, JustifyRaw } from "#src/type/params.js"
 import type { FnSetterStateles } from "#src/type/setter.js"
 import { cl } from "#src/util/cl.js"
-import { nprop_align_new, nprop_direction_new, nprop_justify_new } from "#src/util/nprop/index.js"
+import { nprop_align_new, nprop_direction_new, nprop_justify_new, nprop_portal_new } from "#src/util/nprop/index.js"
 import { stylemap_new_remap } from "#src/util/stylemap/new/remap.js"
 import * as r from "react"
+import * as rdom from "react-dom"
 
 const stylemap = {
     listfix: "listfix",
@@ -228,6 +229,7 @@ export type CmpListFix_Props = Readonly<{
     tabIndex?: number
     justify?: JustifyRaw
     direction?: DirectionRaw
+    portal?: string | HTMLElement
 
     className?: string
     stylemodule?: CmpListFix_StyleModule
@@ -238,6 +240,7 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
     const nprop_gap = props.gap ?? 0
     const nprop_lazy = props.lazy ?? false
     const nprop_align = nprop_align_new(props.align)
+    const nprop_portal = nprop_portal_new(props.portal)
     const nprop_justify = nprop_justify_new(props.justify)
     const nprop_direction = nprop_direction_new(props.direction)
     const nprop_style = r.useMemo(() => (
@@ -347,9 +350,9 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
         return null
     }, [nprop_lazy, visible, ctxstate.open, props.children])
 
-    return <div
+    const element = <div
         ref={mref}
-        
+
         tabIndex={props.tabIndex}
 
         className={cl(
@@ -400,6 +403,12 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
     >
         {children}
     </div>
+
+    if (nprop_portal) {
+        return rdom.createPortal(element, nprop_portal)
+    }
+
+    return element
 }))
 
 export default CmpListFix
