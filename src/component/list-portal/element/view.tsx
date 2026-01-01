@@ -24,9 +24,14 @@ import type { PropDirection_Raw } from "#src/util/prop/direction/type/prop.js"
 import { prop_justify_new } from "#src/util/prop/justify/new/index.js"
 import { prop_justify_new_reversed } from "#src/util/prop/justify/new/reversed.js"
 import type { PropJustify_Raw } from "#src/util/prop/justify/type/prop.js"
+import { prop_portal_new } from "#src/util/prop/portal/new/index.js"
+import type { PropPortal_Raw } from "#src/util/prop/portal/type/prop.js"
 import * as r from "react"
+import * as rdom from "react-dom"
 
-export type CmpListFix_Props = {
+export type CmpListPortal_Props = {
+    readonly portal: NonNullable<PropPortal_Raw>
+
     readonly gap?: number
     readonly lazy?: boolean
 
@@ -34,11 +39,11 @@ export type CmpListFix_Props = {
     readonly justify?: PropJustify_Raw
     readonly direction?: PropDirection_Raw
 
-    readonly clmap?: PropClMap_Raw<keyof typeof prop_clmap_def_listfix>
-    readonly clmap_content?: PropClMap_Raw<keyof typeof prop_clmap_def_content>
-
     readonly transition_nopos?: boolean
     readonly transition_nosize?: boolean
+
+    readonly clmap?: PropClMap_Raw<keyof typeof prop_clmap_def_listfix>
+    readonly clmap_content?: PropClMap_Raw<keyof typeof prop_clmap_def_content>
 
     readonly rearrange?: Partial<ListPosRearrange_Config>
 
@@ -51,14 +56,15 @@ export type CmpListFix_Props = {
     readonly children?: r.ReactNode | (() => r.ReactNode)
 }
 
-const render_view_default: NonNullable<CmpListFix_Props["render_view"]> = function(props) {
+const render_view_default: NonNullable<CmpListPortal_Props["render_view"]> = function(props) {
     return <div {...props} />
 }
 
-export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>((props, f_ref) => {
+export const CmpListPortal = r.memo(r.forwardRef<HTMLDivElement, CmpListPortal_Props>((props, f_ref) => {
     const nprop_gap = props.gap ?? 0
-    const nprop_lazy = props.lazy ?? false
+    const nprop_lazy = props.lazy ?? true
     const nprop_align = prop_align_new(props.align)
+    const nprop_portal = prop_portal_new(props.portal)
     const nprop_justify = prop_justify_new(props.justify)
     const nprop_direction = prop_direction_new(props.direction)
     const nprop_transition_nopos = props.transition_nopos ?? false
@@ -81,12 +87,11 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
     })
 
     useDDNListInfer({
-        visible,
+        visible: visible || open,
     })
 
     useDDNShardInfer({
-        isolated: false,
-
+        isolated: true,
         ref: useRefO(l_ref),
     })
 
@@ -127,61 +132,68 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
     const view_align = listapi.reverse.align ? prop_align_new_reversed(nprop_align) : nprop_align
     const view_justify = listapi.reverse.justify ? prop_justify_new_reversed(nprop_justify) : nprop_justify
 
-    return <CmpCtxState_Content.Provider value={ctxstate_content}>
-        {nprop_render_view({
-            ref,
-            children,
+    if (nprop_portal) {
+        return rdom.createPortal(
+            <CmpCtxState_Content.Provider value={ctxstate_content}>
+                {nprop_render_view({
+                    ref,
+                    children,
 
-            className: cl(
-                nprop_clmap.__qyuddn,
-                nprop_clmap.listfix,
-                open && nprop_clmap._open,
-                nprop_transition_nopos && nprop_clmap._transition_nopos,
-                nprop_transition_nosize && nprop_clmap._transition_nosize,
-                view_align === "end" && nprop_clmap._align_end,
-                view_align === "start" && nprop_clmap._align_start,
-                view_align === "center" && nprop_clmap._align_center,
-                view_justify === "end" && nprop_clmap._justify_end,
-                view_justify === "start" && nprop_clmap._justify_start,
-                nprop_direction === "hor" && nprop_clmap._horizontal,
-                nprop_direction === "ver" && nprop_clmap._vertical,
+                    className: cl(
+                        nprop_clmap.__qyuddn,
+                        nprop_clmap.listfix,
+                        open && nprop_clmap._open,
+                        nprop_transition_nopos && nprop_clmap._transition_nopos,
+                        nprop_transition_nosize && nprop_clmap._transition_nosize,
+                        view_align === "end" && nprop_clmap._align_end,
+                        view_align === "start" && nprop_clmap._align_start,
+                        view_align === "center" && nprop_clmap._align_center,
+                        view_justify === "end" && nprop_clmap._justify_end,
+                        view_justify === "start" && nprop_clmap._justify_start,
+                        nprop_direction === "hor" && nprop_clmap._horizontal,
+                        nprop_direction === "ver" && nprop_clmap._vertical,
 
-                props.className,
-            ),
+                        props.className,
+                    ),
 
-            style: {
-                ["--gap"]: `${nprop_gap}px`,
+                    style: {
+                        ["--gap"]: `${nprop_gap}px`,
 
-                ...cssprops_new_position(listapi.position),
+                        ...cssprops_new_position(listapi.position),
 
-                ...cssprops_new_size({
-                    size: listapi.size,
-                    open: open,
-                    direction: nprop_direction,
-                }),
-            } as r.CSSProperties,
+                        ...cssprops_new_size({
+                            size: listapi.size,
+                            open: open,
+                            direction: nprop_direction,
+                        }),
+                    } as r.CSSProperties,
 
-            onTransitionStart: ev => {
-                props.event_transition_change?.(ev.nativeEvent.propertyName, true)
+                    onTransitionStart: ev => {
+                        props.event_transition_change?.(ev.nativeEvent.propertyName, true)
 
-                if (ev.nativeEvent.propertyName === "opacity" && open) {
-                    visible_set(true)
-                    props.event_visible_change?.(true)
-                }
-            },
+                        if (ev.nativeEvent.propertyName === "opacity" && open) {
+                            visible_set(true)
+                            props.event_visible_change?.(true)
+                        }
+                    },
 
-            onTransitionEnd: ev => {
-                props.event_transition_change?.(ev.nativeEvent.propertyName, false)
+                    onTransitionEnd: ev => {
+                        props.event_transition_change?.(ev.nativeEvent.propertyName, false)
 
-                if (ev.nativeEvent.propertyName === "opacity" && !open) {
-                    listapi.api.clear()
+                        if (ev.nativeEvent.propertyName === "opacity" && !open) {
+                            listapi.api.clear()
 
-                    visible_set(false)
-                    props.event_visible_change?.(false)
-                }
-            },
-        })}
-    </CmpCtxState_Content.Provider>
+                            visible_set(false)
+                            props.event_visible_change?.(false)
+                        }
+                    },
+                })}
+            </CmpCtxState_Content.Provider>,
+            nprop_portal
+        )
+    }
+
+    return null
 }))
 
-export default CmpListFix
+export default CmpListPortal

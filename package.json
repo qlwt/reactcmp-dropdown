@@ -1,7 +1,7 @@
 {
     "name": "@qyu/reactcmp-dropdown",
     "type": "module",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "main": "./build/bundle/entry/index.js",
     "description": "React Components for Dropdown Positioning",
     "keywords": [
@@ -19,11 +19,10 @@
         "url": "git+https://github.com/qlwt/reactcmp-dropdown.git"
     },
     "scripts": {
-        "build": "run-s build:clear build:style:module build:style:global build:style:types build:rollup",
+        "build": "run-s build:clear build:style:module build:style:types build:rollup",
         "build:clear": "rimraf ./build",
         "build:rollup": "rollup -c npm/rollup/rollup.config.js",
-        "build:style:module": "sass ./src/style/index.module.scss:./build/style/index.module.css --no-source-map",
-        "build:style:global": "postcss ./build/style/index.module.css --config ./npm/postcss/ -o ./build/style/index.global.css",
+        "build:style:module": "sass ./src/style/index.module.scss:./build/style/index.css --no-source-map",
         "build:style:types": "tcm ./build/style"
     },
     "exports": {
@@ -32,8 +31,8 @@
             "import": "./build/bundle/entry/index.js"
         },
         "./style/*": {
-            "types": "./build/style/*.css.d.ts",
-            "import": "./build/style/*.css"
+            "types": "./build/style/*.d.ts",
+            "import": "./build/style/*"
         }
     },
     "devDependencies": {
@@ -41,9 +40,6 @@
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
         "npm-run-all": "^4.1.5",
-        "postcss": "^8.5.6",
-        "postcss-cli": "^11.0.1",
-        "postcss-prefix-selector": "^2.1.1",
         "rimraf": "^6.0.1",
         "rollup": "^4.20.0",
         "sass": "^1.94.2",
