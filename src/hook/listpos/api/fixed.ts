@@ -135,17 +135,18 @@ const normalize_align = function(params: NormalizeAlign_Params) {
                 axis_main.flow_reverse.position_set(null)
             } else {
                 const point = axis_main.container_pos + axis_main.container_size / 2
+                const spacereq = axis_main.list_size / 2
                 const freespace_reverse = point
                 const freespace_direct = axis_main.screen_size - point
 
-                if (axis_main.list_size >= freespace_reverse) {
+                if (spacereq >= freespace_reverse) {
                     params.reverse_set(false)
 
                     axis_main.flow_direct.position_set(0)
                     axis_main.flow_reverse.position_set(null)
 
                     axis_main.size_set(axis_main.list_size)
-                } else if (axis_main.list_size >= freespace_direct) {
+                } else if (spacereq >= freespace_direct) {
                     params.reverse_set(true)
 
                     axis_main.flow_reverse.position_set(0)
@@ -155,7 +156,7 @@ const normalize_align = function(params: NormalizeAlign_Params) {
                 } else {
                     params.reverse_set(false)
 
-                    axis_main.flow_direct.position_set(point - axis_main.list_size / 2)
+                    axis_main.flow_direct.position_set(point - spacereq)
                     axis_main.flow_reverse.position_set(null)
 
                     axis_main.size_set(axis_main.list_size)
