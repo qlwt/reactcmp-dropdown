@@ -24,6 +24,7 @@ import type { PropDirection_Raw } from "#src/util/prop/direction/type/prop.js"
 import { prop_justify_new } from "#src/util/prop/justify/new/index.js"
 import { prop_justify_new_reversed } from "#src/util/prop/justify/new/reversed.js"
 import type { PropJustify_Raw } from "#src/util/prop/justify/type/prop.js"
+import type { PropStretch_Raw } from "#src/util/prop/stretch/type/prop.js"
 import * as r from "react"
 
 export type CmpListFix_Props = {
@@ -32,6 +33,7 @@ export type CmpListFix_Props = {
 
     readonly align?: PropAlign_Raw
     readonly justify?: PropJustify_Raw
+    readonly stretch?: PropStretch_Raw
     readonly direction?: PropDirection_Raw
 
     readonly clmap?: PropClMap_Raw<keyof typeof prop_clmap_def_listfix>
@@ -74,7 +76,7 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
 
     const open = useOpenInfer({})
     const [visible, visible_set] = r.useState(false)
-    const listapi = useListPosApiFixed({ ref_list, ref_content, clmap_content: nprop_clmap_content })
+    const listapi = useListPosApiFixed({ ref_list, ref_content, clmap_content: nprop_clmap_content, stretch: props.stretch, })
 
     const ctxstate_content = useCtxStateInitContent({
         ref_content: l_ref_content,

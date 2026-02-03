@@ -26,6 +26,7 @@ import { prop_justify_new_reversed } from "#src/util/prop/justify/new/reversed.j
 import type { PropJustify_Raw } from "#src/util/prop/justify/type/prop.js"
 import { prop_portal_new } from "#src/util/prop/portal/new/index.js"
 import type { PropPortal_Raw } from "#src/util/prop/portal/type/prop.js"
+import type { PropStretch_Raw } from "#src/util/prop/stretch/type/prop.js"
 import * as r from "react"
 import * as rdom from "react-dom"
 
@@ -34,6 +35,7 @@ export type CmpListPortal_Props = {
 
     readonly gap?: number
     readonly lazy?: boolean
+    readonly stretch?: PropStretch_Raw
 
     readonly align?: PropAlign_Raw
     readonly justify?: PropJustify_Raw
@@ -80,7 +82,7 @@ export const CmpListPortal = r.memo(r.forwardRef<HTMLDivElement, CmpListPortal_P
 
     const open = useOpenInfer({})
     const [visible, visible_set] = r.useState(false)
-    const listapi = useListPosApiFixed({ ref_list, ref_content, clmap_content: nprop_clmap_content })
+    const listapi = useListPosApiFixed({ ref_list, ref_content, clmap_content: nprop_clmap_content, stretch: props.stretch })
 
     const ctxstate_content = useCtxStateInitContent({
         ref_content: l_ref_content,

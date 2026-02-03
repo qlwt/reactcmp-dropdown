@@ -9,7 +9,20 @@ import type { PropAlign } from "#src/util/prop/align/type/prop.js"
 import type { PropClMap_DefContent } from "#src/util/prop/clmap/def/content.js"
 import type { PropDirection } from "#src/util/prop/direction/type/prop.js"
 import type { PropJustify } from "#src/util/prop/justify/type/prop.js"
+import { prop_stretch_new } from "#src/util/prop/stretch/new/index.js"
+import type { PropStretch, PropStretch_Raw } from "#src/util/prop/stretch/type/prop.js"
 import * as r from "react"
+
+const stretch_apply = function(stretch: PropStretch, target: number, container: number): number {
+    switch (stretch) {
+        case "none":
+            return target
+        case "min":
+            return Math.max(target, container)
+        case "strict":
+            return container
+    }
+}
 
 type Normalize_Flow = {
     readonly position_set: FnSetterStateles<number | null>
@@ -104,6 +117,7 @@ type NormalizeAlign_Params = {
     readonly direction: PropDirection
     readonly reverse_set: FnSetterStateles<boolean>
 
+    readonly stretch: PropStretch
     readonly axis_main: Normalize_Axis
     readonly axis_cross: Normalize_Axis
 }
@@ -124,9 +138,11 @@ const normalize_align = function(params: NormalizeAlign_Params) {
         }
     }
 
+    const list_size_normalized = stretch_apply(params.stretch, axis_main.list_size, axis_main.container_size)
+
     switch (params.align) {
         case "center": {
-            if (axis_main.list_size >= axis_main.screen_size) {
+            if (list_size_normalized >= axis_main.screen_size) {
                 params.reverse_set(false)
 
                 axis_main.size_set(axis_main.screen_size)
@@ -135,7 +151,7 @@ const normalize_align = function(params: NormalizeAlign_Params) {
                 axis_main.flow_reverse.position_set(null)
             } else {
                 const point = axis_main.container_pos + axis_main.container_size / 2
-                const spacereq = axis_main.list_size / 2
+                const spacereq = list_size_normalized / 2
                 const freespace_reverse = point
                 const freespace_direct = axis_main.screen_size - point
 
@@ -145,21 +161,21 @@ const normalize_align = function(params: NormalizeAlign_Params) {
                     axis_main.flow_direct.position_set(0)
                     axis_main.flow_reverse.position_set(null)
 
-                    axis_main.size_set(axis_main.list_size)
+                    axis_main.size_set(list_size_normalized)
                 } else if (spacereq >= freespace_direct) {
                     params.reverse_set(true)
 
                     axis_main.flow_reverse.position_set(0)
                     axis_main.flow_direct.position_set(null)
 
-                    axis_main.size_set(axis_main.list_size)
+                    axis_main.size_set(list_size_normalized)
                 } else {
                     params.reverse_set(false)
 
                     axis_main.flow_direct.position_set(point - spacereq)
                     axis_main.flow_reverse.position_set(null)
 
-                    axis_main.size_set(axis_main.list_size)
+                    axis_main.size_set(list_size_normalized)
                 }
             }
 
@@ -174,25 +190,25 @@ const normalize_align = function(params: NormalizeAlign_Params) {
 
             const position_direct = Math.max(0, (
                 + axis_main.container_pos
-                - Math.max(0, axis_main.list_size - freespace_direct)
+                - Math.max(0, list_size_normalized - freespace_direct)
             ))
 
             const position_reverse = Math.max(0, (
                 + axis_main.screen_size
                 - (axis_main.container_pos + axis_main.container_size)
-                - Math.max(0, axis_main.list_size - freespace_reverse)
+                - Math.max(0, list_size_normalized - freespace_reverse)
             ))
 
-            if (freespace_direct >= axis_main.list_size || freespace_direct >= freespace_reverse) {
+            if (freespace_direct >= list_size_normalized || freespace_direct >= freespace_reverse) {
                 params.reverse_set(false)
 
-                axis_main.size_set(Math.min(freespace_direct, axis_main.list_size))
+                axis_main.size_set(Math.min(freespace_direct, list_size_normalized))
 
                 flow_direct.position_set(position_direct)
             } else {
                 params.reverse_set(true)
 
-                axis_main.size_set(Math.min(freespace_reverse, axis_main.list_size))
+                axis_main.size_set(Math.min(freespace_reverse, list_size_normalized))
 
                 flow_direct.position_set(null)
                 flow_reverse.position_set(position_reverse)
@@ -210,25 +226,25 @@ const normalize_align = function(params: NormalizeAlign_Params) {
             const position_direct = Math.max(0, (
                 + axis_main.screen_size
                 - (axis_main.container_pos + axis_main.container_size)
-                - Math.max(0, axis_main.list_size - freespace_direct)
+                - Math.max(0, list_size_normalized - freespace_direct)
             ))
 
             const position_reverse = Math.max(0, (
                 + axis_main.container_pos
-                - Math.max(0, axis_main.list_size - freespace_reverse)
+                - Math.max(0, list_size_normalized - freespace_reverse)
             ))
 
-            if (freespace_direct >= axis_main.list_size || freespace_direct >= freespace_reverse) {
+            if (freespace_direct >= list_size_normalized || freespace_direct >= freespace_reverse) {
                 params.reverse_set(false)
 
-                axis_main.size_set(Math.min(freespace_direct, axis_main.list_size))
+                axis_main.size_set(Math.min(freespace_direct, list_size_normalized))
 
                 flow_reverse.position_set(null)
                 flow_direct.position_set(position_direct)
             } else {
                 params.reverse_set(true)
 
-                axis_main.size_set(Math.min(freespace_reverse, axis_main.list_size))
+                axis_main.size_set(Math.min(freespace_reverse, list_size_normalized))
 
                 flow_direct.position_set(null)
                 flow_reverse.position_set(position_reverse)
@@ -251,9 +267,13 @@ export type UseListPosFixed_Params = {
     readonly ref_content: FnORefHTML
 
     readonly clmap_content: PropClMap_DefContent
+
+    readonly stretch?: PropStretch_Raw
 }
 
 export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseListPosFixed_Return {
+    const nprop_stretch = prop_stretch_new(params.stretch)
+
     const ctxstate_refs = useCtxStateRefs()
 
     const [align_reverse, align_reverse_set] = r.useState(false)
@@ -355,6 +375,7 @@ export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseL
                         axis_main,
                         axis_cross,
                         align: config.align,
+                        stretch: nprop_stretch,
                         direction: config.direction,
                         reverse_set: align_reverse_set,
                     })
@@ -364,6 +385,6 @@ export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseL
                     }
                 }
             },
-        }), [ctxstate_refs.rootref, params.ref_list, params.ref_content])
+        }), [ctxstate_refs.rootref, params.ref_list, params.ref_content, nprop_stretch])
     } as const
 }
