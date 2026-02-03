@@ -46,6 +46,8 @@ function DDN(props: { children: r.Children }) {
             align={"start"}
             // optional
             justify={"end"}
+            // optional
+            stretch={"min"}
         >
             {/* Used to measure content. Required for any list */}
             <ddn.Content>
@@ -87,7 +89,7 @@ const CustomButton = function () {
     // this will give you calculated value of wether your dropdown is open or not
     const open = ddn.useOpenInfer({})
 
-    // this wrapper is required, it necessary events and stuff
+    // this wrapper is required, it registers necessary events and stuff
     return <ddn.ButtonVirtual target={ref}>
         <button 
             ref={ref} 
@@ -197,6 +199,13 @@ function App() {
             justify
             // set justify directly
             justify={"end" || "start"}
+
+            // stretch to min default is "none"
+            stretch
+            // set stretch directly
+            // "min" stretches it to the size of the root if list is smaller
+            // "strict" sets the size of the root to the list
+            stretch={"none" | "min" | "strict"}
 
             // recalculate position on, optional
             // default values shown below
