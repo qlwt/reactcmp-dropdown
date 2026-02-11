@@ -13,9 +13,9 @@ const refs_unpack = function*(src: Iterable<FnORefHTML>): IterableIterator<HTMLE
     }
 }
 
-const element_outside = function(element: Element, shards: Iterable<HTMLElement>): boolean {
+const element_outside = function(path: EventTarget[], shards: Iterable<HTMLElement>): boolean {
     for (const ref of shards) {
-        if (ref === element || ref.contains(element)) {
+        if (path.includes(ref)) {
             return false
         }
     }
@@ -48,11 +48,13 @@ export const useCloseEvtRoot = function(params: UseCloseEvtRoot_Params) {
             if (nconfig_blur) {
                 document.addEventListener("focusin", ev => {
                     if (ev.target instanceof Element) {
+                        const path = ev.composedPath()
+
                         if (ev.target.hasAttribute("data-focusguard")) {
-                            if (element_outside(ev.target, refs_unpack(ctxstate_refs.register.it_down))) {
+                            if (element_outside(path, refs_unpack(ctxstate_refs.register.it_down))) {
                                 ctxstate_open.open_set(false)
                             }
-                        } else if (element_outside(ev.target, refs_unpack(ctxstate_refs.register.it_context))) {
+                        } else if (element_outside(path, refs_unpack(ctxstate_refs.register.it_context))) {
                             ctxstate_open.open_set(false)
                         }
                     }
@@ -61,12 +63,11 @@ export const useCloseEvtRoot = function(params: UseCloseEvtRoot_Params) {
 
             if (nconfig_click) {
                 document.addEventListener("click", ev => {
+                    const path = ev.composedPath()
                     const shards = refs_unpack(ctxstate_refs.register.it_context)
 
-                    if (ev.target instanceof Element) {
-                        if (element_outside(ev.target, shards)) {
-                            ctxstate_open.open_set(false)
-                        }
+                    if (element_outside(path, shards)) {
+                        ctxstate_open.open_set(false)
                     }
                 }, { signal: controller.signal })
             }
