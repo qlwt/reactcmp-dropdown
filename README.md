@@ -170,6 +170,12 @@ function App() {
             clmap={clmap}
             clmap_content={clmap}
             render_view={props => <div {...props} />}
+            // how to measure content
+            // offset (default) will use .offsetHeight and .offsetWidth
+            // precise will use .getBoundingClientRect()
+            // offset properties are integers, so they cut the floating point
+            // .getBoundingClientRect() uses floats, but also measures after transforms
+            measurement_kind={"offset" || "precise"}
 
             // specify the portal
             portal={"domid"}
