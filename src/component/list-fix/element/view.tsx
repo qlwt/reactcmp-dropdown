@@ -59,7 +59,7 @@ const render_view_default: NonNullable<CmpListFix_Props["render_view"]> = functi
 
 export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>((props, f_ref) => {
     const nprop_gap = props.gap ?? 0
-    const nprop_lazy = props.lazy ?? false
+    const nprop_lazy = props.lazy ?? true
     const nprop_align = prop_align_new(props.align)
     const nprop_justify = prop_justify_new(props.justify)
     const nprop_direction = prop_direction_new(props.direction)
