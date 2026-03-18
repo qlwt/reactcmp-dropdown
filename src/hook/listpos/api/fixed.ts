@@ -5,6 +5,7 @@ import type { ListPosApi_Reverse } from "#src/hook/listpos/api/type/reverse.js"
 import type { ListPosApi_Size } from "#src/hook/listpos/api/type/size.js"
 import type { FnORefHTML } from "#src/type/fnref.js"
 import type { FnSetterStateles } from "#src/type/setter.js"
+import { measurement_new, type Measurement_New_Kind } from "#src/util/measurement/new.js"
 import type { PropAlign } from "#src/util/prop/align/type/prop.js"
 import type { PropClMap_DefContent } from "#src/util/prop/clmap/def/content.js"
 import type { PropDirection } from "#src/util/prop/direction/type/prop.js"
@@ -267,6 +268,7 @@ export type UseListPosFixed_Params = {
     readonly ref_content: FnORefHTML
 
     readonly clmap_content: PropClMap_DefContent
+    readonly measurement_kind: Measurement_New_Kind
 
     readonly stretch?: PropStretch_Raw
 }
@@ -327,9 +329,10 @@ export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseL
                     }
 
                     const container_rect = container.getBoundingClientRect()
+                    const content_rect = measurement_new(content, { kind: params.measurement_kind })
 
                     const axis_main: Normalize_Axis = {
-                        list_size: content.offsetHeight,
+                        list_size: content_rect.height,
                         screen_size: document.documentElement.clientHeight,
                         container_pos: container_rect.y,
                         container_size: container_rect.height,
@@ -346,7 +349,7 @@ export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseL
                     }
 
                     const axis_cross: Normalize_Axis = {
-                        list_size: content.offsetWidth,
+                        list_size: content_rect.width,
                         screen_size: document.documentElement.clientWidth,
                         container_pos: container_rect.x,
                         container_size: container_rect.width,
@@ -385,6 +388,6 @@ export const useListPosApiFixed = function(params: UseListPosFixed_Params): UseL
                     }
                 }
             },
-        }), [ctxstate_refs.rootref, params.ref_list, params.ref_content, nprop_stretch])
+        }), [ctxstate_refs.rootref, params.ref_list, params.ref_content, nprop_stretch, params.measurement_kind])
     } as const
 }

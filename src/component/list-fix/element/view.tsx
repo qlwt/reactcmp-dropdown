@@ -12,6 +12,7 @@ import { useRefO } from "#src/hook/ref/o.js"
 import { cl } from "#src/util/clname/merge.js"
 import { cssprops_new_position } from "#src/util/cssprops/new/position.js"
 import { cssprops_new_size } from "#src/util/cssprops/new/size.js"
+import type { Measurement_New_Kind } from "#src/util/measurement/new.js"
 import { prop_align_new } from "#src/util/prop/align/new/index.js"
 import { prop_align_new_reversed } from "#src/util/prop/align/new/reversed.js"
 import type { PropAlign_Raw } from "#src/util/prop/align/type/prop.js"
@@ -30,6 +31,7 @@ import * as r from "react"
 export type CmpListFix_Props = {
     readonly gap?: number
     readonly lazy?: boolean
+    readonly measurement_kind?: Measurement_New_Kind
 
     readonly align?: PropAlign_Raw
     readonly justify?: PropJustify_Raw
@@ -65,6 +67,7 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
     const nprop_direction = prop_direction_new(props.direction)
     const nprop_transition_nopos = props.transition_nopos ?? false
     const nprop_transition_nosize = props.transition_nosize ?? false
+    const nprop_measurement_kind = props.measurement_kind ?? "offset"
     const nprop_render_view = props.render_view ?? render_view_default
     const nprop_clmap = r.useMemo(() => prop_clmap_new(props.clmap, prop_clmap_def_listfix), [props.clmap])
     const nprop_clmap_content = r.useMemo(() => prop_clmap_new(props.clmap_content, prop_clmap_def_content), [props.clmap_content])
@@ -76,7 +79,14 @@ export const CmpListFix = r.memo(r.forwardRef<HTMLDivElement, CmpListFix_Props>(
 
     const open = useOpenInfer({})
     const [visible, visible_set] = r.useState(false)
-    const listapi = useListPosApiFixed({ ref_list, ref_content, clmap_content: nprop_clmap_content, stretch: props.stretch, })
+
+    const listapi = useListPosApiFixed({
+        ref_list,
+        ref_content,
+        clmap_content: nprop_clmap_content,
+        stretch: props.stretch,
+        measurement_kind: nprop_measurement_kind,
+    })
 
     const ctxstate_content = useCtxStateInitContent({
         ref_content: l_ref_content,

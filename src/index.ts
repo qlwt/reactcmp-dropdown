@@ -80,3 +80,5 @@ export * from "#src/util/prop/clmap/def/content.js"
 
 export * from "#src/util/cssprops/new/size.js"
 export * from "#src/util/cssprops/new/position.js"
+
+export * from "#src/util/measurement/new.js"
